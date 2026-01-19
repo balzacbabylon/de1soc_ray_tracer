@@ -12,3 +12,13 @@ Resources:
 projected triangles controlled by num_triangles_to_render, initializes in update() and reset every loop
 
 mesh object initialized in mesh.c (i think) when loading object file in setup() 
+
+
+
+
+
+
+
+good article "[understanding the view matrix](https://www.3dgep.com/understanding-the-view-matrix/)"
+
+[randomization in c yale article](https://www.cs.yale.edu/homes/aspnes/pinewiki/C(2f)Randomization.html)
