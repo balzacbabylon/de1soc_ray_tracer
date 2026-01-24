@@ -2,6 +2,7 @@
 #include "fixed_math.h"
 #include "renderer.h"
 #include "platform.h"
+#include "cube.h"
 	
 int main(void){
 
@@ -23,7 +24,7 @@ int main(void){
 	drawline(p2,p0,0xFFFF);
 	*/
 
-	
+	/*
 	//TODO: Implement out of bounds checking 
 	Vertex vAf = {FLOAT_TO_FIXED(-3.0),FLOAT_TO_FIXED(-1.0),FLOAT_TO_FIXED(5)};
 	Vertex vBf = {FLOAT_TO_FIXED(-3.0),FLOAT_TO_FIXED(1.0),FLOAT_TO_FIXED(5)};
@@ -53,7 +54,20 @@ int main(void){
 	drawline(project_vertex(vBf),project_vertex(vCf),0xF800);
 	drawline(project_vertex(vCf),project_vertex(vDf),0xF800);
 	drawline(project_vertex(vDf),project_vertex(vAf),0xF800);
-	
+	*/
+
+	Object o;
+	o.v.data = _vertices;
+	o.v.length = _NUM_VERTS;
+	o.t.data = _indices;
+	o.t.length = _NUM_INDICES;
+
+	PointArray projected;
+	projected.data[_NUM_VERTS];
+	projected.length = _NUM_VERTS;
+
+	RenderObject(o, &projected);
+
 
 	platform_swap_buffers();
 

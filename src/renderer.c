@@ -8,19 +8,10 @@
 // --- Internal Helper Functions (Marked static) ---
 
 static void swap(Point* p0, Point* p1) {
-    Point temp = *p0;
+    
+	Point temp = *p0;
     *p0 = *p1;
     *p1 = temp;
-
-    /* old implementation
-    fixed x_t,y_t;
-	x_t = p0->x;
-	y_t = p0->y;
-	p0->x = p1->x;
-	p0->y = p1->y;
-	p1->x = x_t;
-	p1->y = y_t;
-    */
 
 }
 
@@ -323,4 +314,28 @@ void drawshadedtriangle(Point P0, Point P1, Point P2, short int color) {
     free(x12.data);  free(h12.data);
     free(x02.data);  free(h02.data);
     free(x012.data); free(h012.data);
+}
+
+void DrawWireFrameTriangle(Point P0, Point P1, Point P2, short int color){
+
+	//TODO implement method using color vertex
+
+}
+
+
+void RenderObject(Object obj, PointArray* pj){
+
+	for(int i = 0; i < obj.v.length; i++ ){
+		pj->data[i] = project_vertex(obj.v.data[i]);	
+	}
+	for(int j = 0; j < obj.t.length; j++){
+		RenderTriangle(obj.t.data[j],pj);
+	}
+
+}
+
+void RenderTriangle(Triangle t, PointArray* pj){
+
+
+
 }
