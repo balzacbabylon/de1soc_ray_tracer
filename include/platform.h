@@ -10,5 +10,6 @@ void put_pixel(int x, int y, short int color);
 int platform_read_keys(void);
 void platform_clear_screen(void);
 void wait_for_vsync(void);
+void printuart(const char *ptr);
 
 #endif

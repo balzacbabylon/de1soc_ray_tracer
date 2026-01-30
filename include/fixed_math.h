@@ -24,18 +24,18 @@ static inline fixed div_fixed(fixed a, fixed b) {
 
 // Integer Square Root (for bounding sphere)
 // Standard "bit-shift" implementation, much faster than soft-float sqrt
-static inline unsigned int isqrt(uint64_t n) {
-    unsigned int c = 0x8000;
-    unsigned int g = 0x8000;
+static inline uint32_t isqrt(uint64_t n) {
+    uint32_t c = 1u << 31;
+    uint32_t g = 1u << 31;
 
-    for(;;) {
-        // g*g can exceed 32 bits, so cast to 64-bit for comparison
-        if((uint64_t)g * g > n) g ^= c;
+    for (;;) {
+        if ((uint64_t)g * g > n) g ^= c;
         c >>= 1;
-        if(c == 0) return g;
+        if (c == 0) return g;
         g |= c;
     }
 }
+
 
 // Sine Lookup Table (0 to 90 degrees in fixed point)
 // 256 entries for 0-90 degrees is usually plenty for Nios II

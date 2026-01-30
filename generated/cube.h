@@ -14,7 +14,7 @@ const Vertex _vertices[] = {
     { 65536, -65536, -65536, 43690, -43690, -21845 },
 };
 
-#define _NUM_INDICES 12
+#define _NUM_TRIANGLES 12
 Triangle _indices[] = {
     {0, 1, 2},
     {2, 1, 3},

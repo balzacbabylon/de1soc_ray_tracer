@@ -2,6 +2,7 @@
 #include "fixed_math.h"
 #include "renderer.h"
 #include "platform.h"
+//#include "lh_inflated.h"
 #include "cube.h"
 #include <stdlib.h>
 	
@@ -64,22 +65,24 @@ int main(void){
 		o.v.data[i] = _vertices[i];
 	}
 	o.v.length = _NUM_VERTS;
-	o.t.data = malloc(_NUM_INDICES*sizeof(Triangle));
-	for(int i = 0; i < _NUM_INDICES; i++){
+	o.t.data = malloc(_NUM_TRIANGLES*sizeof(Triangle));
+	for(int i = 0; i < _NUM_TRIANGLES; i++){
 		o.t.data[i] = _indices[i];
 	}
-	o.t.length = _NUM_INDICES;
-	o.tca = malloc(_NUM_INDICES*sizeof(short int));
-	for(int i = 0; i < _NUM_INDICES; i++){
+	o.t.length = _NUM_TRIANGLES;
+	o.tca = malloc(_NUM_TRIANGLES*sizeof(short int));
+	for(int i = 0; i < _NUM_TRIANGLES; i++){
 		o.tca[i] = _colorarray[i];
 	}
 
+	printuart("created object successfully");
 	//Point pjdat[_NUM_VERTS];
 	PointArray projected;
 	projected.data = malloc(_NUM_VERTS*sizeof(Point));
 	projected.length = _NUM_VERTS;
 
-	fixed d = CalculateAutoPosition(&o, 2.5);
+	fixed d = CalculateAutoPosition(&o, 1.5);
+	printuart("calculated distance");
 	
 	//RenderObject(o, &projected,60.0,d);
 	
@@ -113,6 +116,7 @@ int main(void){
 
         // Pass both angles to renderer
         RenderObject(o, &projected, angle_x, angle_y, d);
+		//printuart("rendered object");
 
         wait_for_vsync();
     }

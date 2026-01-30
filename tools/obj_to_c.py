@@ -37,6 +37,36 @@ def parse_and_process(filename):
                     face_idxs.append(int(idx_str) - 1) 
                 faces.append(face_idxs)
 
+    # --- NEW: Find Max Radius Vertex ---
+    max_dist_sq = -1.0
+    max_idx = -1
+    max_v = (0,0,0)
+
+    for i, v in enumerate(raw_vertices):
+        dist_sq = v[0]*v[0] + v[1]*v[1] + v[2]*v[2]
+        if dist_sq > max_dist_sq:
+            max_dist_sq = dist_sq
+            max_idx = i
+            max_v = v
+
+    print(f"\n--- Max Radius Analysis ---")
+    if max_idx != -1:
+        # Convert to fixed point
+        fx = int(max_v[0] * 65536)
+        fy = int(max_v[1] * 65536)
+        fz = int(max_v[2] * 65536)
+        
+        real_radius = math.sqrt(max_dist_sq)
+        fixed_radius = int(real_radius * 65536)
+
+        print(f"Vertex Index: {max_idx}")
+        print(f"Float Coords: {max_v}")
+        print(f"Fixed Point Pair: {{ {fx}, {fy}, {fz} }}")
+        print(f"Real Radius: {real_radius}")
+        print(f"Fixed Radius: {fixed_radius}")
+    print("---------------------------\n")
+
+
     # 2. Initialize Accumulators for Vertex Normals
     # List of [0,0,0] with same length as vertices
     acc_normals = [(0.0, 0.0, 0.0)] * len(raw_vertices)
@@ -52,8 +82,6 @@ def parse_and_process(filename):
         edge2 = (v2[0]-v0[0], v2[1]-v0[1], v2[2]-v0[2])
 
         # Calculate Face Normal
-        # Note: We do NOT normalize here yet. Weighting by area (magnitude of cross product) 
-        # is actually mathematically better for irregular meshes!
         fn = cross_product(edge1, edge2)
 
         # Add this normal to all 3 vertices of the face
@@ -69,35 +97,46 @@ def parse_and_process(filename):
     return raw_vertices, faces, final_vertex_normals
 
 def generate_c(vertices, faces, normals, name):
-    print(f"#ifndef {name.upper()}_H")
-    print(f"#define {name.upper()}_H")
-    print('#include "common.h"') # Assumes your Vertex struct is here
-
-    # 1. Combined Vertex Array (Position + Normal)
-    # This matches your C struct: typedef struct { float x,y,z; float nx,ny,nz; } Vertex;
-    print(f"\n#define {name.upper()}_NUM_VERTS {len(vertices)}")
-    print(f"const Vertex {name}_vertices[] = {{")
+    output_filename = "out.h"
     
-    for i in range(len(vertices)):
-        v = vertices[i]
-        n = normals[i]
+    with open(output_filename, "w") as f:
+        f.write(f"#ifndef {name.upper()}_H\n")
+        f.write(f"#define {name.upper()}_H\n")
+        f.write('#include "common.h"\n') 
+
+        # 1. Combined Vertex Array (Position + Normal)
+        f.write(f"\n#define {name.upper()}_NUM_VERTS {len(vertices)}\n")
+        f.write(f"const Vertex {name}_vertices[] = {{\n")
         
-        # Fixed point conversion (1.0 = 65536)
-        vx, vy, vz = int(v[0]*65536), int(v[1]*65536), int(v[2]*65536)
-        nx, ny, nz = int(n[0]*65536), int(n[1]*65536), int(n[2]*65536)
+        for i in range(len(vertices)):
+            v = vertices[i]
+            n = normals[i]
+            
+            # Fixed point conversion (1.0 = 65536)
+            vx, vy, vz = int(v[0]*65536), int(v[1]*65536), int(v[2]*65536)
+            nx, ny, nz = int(n[0]*65536), int(n[1]*65536), int(n[2]*65536)
+            
+            f.write(f"    {{ {vx}, {vy}, {vz}, {nx}, {ny}, {nz} }},\n")
         
-        print(f"    {{ {vx}, {vy}, {vz}, {nx}, {ny}, {nz} }},")
+        f.write("};\n")
+
+        # 2. Indices (The Connectivity) - UPDATED to Triangle Struct format
+        f.write(f"\n#define {name.upper()}_NUM_TRIANGLES {len(faces)}\n")
+        f.write(f"const Triangle {name}_indices[] = {{\n")
+        for face in faces:
+            # Writes: { 0, 1, 2 },
+            f.write(f"    {{ {face[0]}, {face[1]}, {face[2]} }},\n")
+        f.write("};\n")
+
+        # 3. Color Array
+        f.write(f"\nconst short int {name}_colorarray[] = {{\n")
+        for i in range(len(faces)):
+            f.write("    GRAY,\n")
+        f.write("};\n")
+
+        f.write(f"#endif\n")
     
-    print("};")
-
-    # 2. Indices (The Connectivity)
-    print(f"\n#define {name.upper()}_NUM_INDICES {len(faces) * 3}")
-    print(f"const int {name}_indices[] = {{")
-    for f in faces:
-        print(f"    {f[0]}, {f[1]}, {f[2]},")
-    print("};")
-
-    print(f"#endif")
+    print(f"Successfully wrote {len(vertices)} vertices and {len(faces)} triangles to {output_filename}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

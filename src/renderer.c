@@ -393,11 +393,12 @@ void RenderObject(Object obj, PointArray* pj, int angle_x, int angle_y, fixed of
  * @param padding_factor: Multiplier for extra space (e.g., 1.1 for 10% padding)
  * @return: The required Z translation in fixed-point format
  */
+// renderer.c
+
 fixed CalculateAutoPosition(Object* obj, float padding_factor) {
     
-    // 1. Find Bounding Radius (Same as before)
+    // 1. Find Radius (Use 64-bit to be safe)
     uint64_t max_dist_sq = 0;
-
     for (int i = 0; i < obj->v.length; i++) {
         Vertex v = obj->v.data[i];
         int64_t x = v.x; 
@@ -407,20 +408,20 @@ fixed CalculateAutoPosition(Object* obj, float padding_factor) {
         if(dist > max_dist_sq) max_dist_sq = dist;
     }
 
+    // R is roughly 8,550,000
     fixed R = (fixed)isqrt(max_dist_sq);
 
-    // 2. Calculate Distance using Screen Constants
-    // Formula: d = (R * FOCAL_LENGTH) / (CH / 2)
+    // 2. Calculate D using 64-bit math to prevent overflow
+    // Formula: d = (R * 256) / 120
+    // We do NOT use mul_fixed here. We treat R as a raw integer magnitude.
     
-    // We use the smallest dimension (CH) so it fits vertically.
-    // If you used CW, it might get cut off at the top/bottom.
-    fixed half_screen_height = INT_TO_FIXED(CH / 2); // 120 in fixed point
-    fixed focal_length = INT_TO_FIXED(FOCAL_LENGTH);
+    int64_t numerator = (int64_t)R * (int64_t)FOCAL_LENGTH; // 8.5M * 256 = 2.17 Billion
+    int64_t denominator = (int64_t)(CH / 2);                // 120
 
-    // d = (R * 256) / 120
-    fixed d = div_fixed(mul_fixed(R, focal_length), half_screen_height);
+    // Result will be approx 18,240,000 (which fits in fixed/int32)
+    fixed d = (fixed)(numerator / denominator);
 
-    // 3. Apply Padding (e.g., 1.1x)
+    // 3. Apply Padding
     fixed padding = FLOAT_TO_FIXED(padding_factor);
     d = mul_fixed(d, padding);
 
