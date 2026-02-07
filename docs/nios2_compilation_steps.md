@@ -93,3 +93,15 @@ You can verify the output file using `nios2-elf-objdump` (found in the same bin 
 ```powershell
 & "c:\intelFPGA_lite\18.1\nios2eds\bin\gnu\H-x86_64-mingw32\bin\nios2-elf-objdump.exe" -d my_program.elf | Select-Object -First 20
 ```
+
+### Simulation via CPulator
+You can validate your software functionality **without the physical FPGA** using the [CPulator System Simulator](https://cpulator.01xz.net/?sys=nios-de1soc).
+
+1.  **Select System**: Ensure "Nios II De1-SoC" is selected in the dropdown.
+2.  **Upload Binary**: 
+    *   Click `File` -> `Load ELF executable...`.
+    *   Select your `main.elf` from the `software/bin/` directory.
+3.  **Interact**:
+    *   The **UART Terminal** window will show `printf` output.
+    *   You can verify memory writes in the **Memory** tab.
+    *   Basic VGA output may be viewable via the **VGA Pixel Buffer** tab if configured.

@@ -11,6 +11,10 @@
 ### Ray Tracing (Future Research)
 - [Tom Verbeure: Ray Tracer using HDL](https://github.com/tomverbeure/rt?tab=readme-ov-file) & [Racing the Beam Ray Tracer](https://tomverbeure.github.io/rtl/2018/11/26/Racing-the-Beam-Ray-Tracer.html)
 
+### Simulation & Emulation
+- [CPulator: Nios II Simulator](https://cpulator.01xz.net/?sys=nios-de1soc) (Browser-based simulator for DE1-SoC software)
+
+
 ## Computer Graphics & C
 - [Gabriel Gambetta: Computer Graphics from Scratch](https://gabrielgambetta.com/computer-graphics-from-scratch/)
 - [Refactoring Guru: Dive Into DESIGN PATTERNS](https://refactoring.guru/design-patterns/book)

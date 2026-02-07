@@ -47,7 +47,8 @@ Multimodal neuroimaging (EEG, MEG, fNIRS) helps creating a fuller picture of bra
   - **Linux**: Use the provided `Makefile` in `software/`.
   - **Nios II (Bare Metal)**: Follow the [Nios II Compilation Guide](docs/nios2_compilation_steps.md).
     *   Requires **Intel FPGA Monitor Program** (Quartus 18.1).
-    *   Run `software/build_nios2.ps1` to compile.
+    *   Run `software/tools/build_nios2.ps1` to compile.
+    *   **Test without Hardware**: Use [CPulator](https://cpulator.01xz.net/?sys=nios-de1soc) to simulate your `.elf` file.
 - **Software**:
   - Intel Quartus Prime Lite 18.1.
   - SoC EDS (Embedded Design Suite).
