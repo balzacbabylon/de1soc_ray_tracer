@@ -9,6 +9,8 @@
 software/build/
 software/generated/*.o
 *.elf
+*.srec
+*.exe
 *.so
 *.a
 *.o

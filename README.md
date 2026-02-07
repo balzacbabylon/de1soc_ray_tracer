@@ -41,6 +41,13 @@ Multimodal neuroimaging (EEG, MEG, fNIRS) helps creating a fuller picture of bra
 
 ### Prerequisites
 - **Hardware**: Terasic DE1-SoC Board.
+### Compilation & Build
+- **FPGA (Quartus)**: Open `de1soc_ray_tracer.qpf` in Quartus Prime 18.1.
+- **HPS (Software)**:
+  - **Linux**: Use the provided `Makefile` in `software/`.
+  - **Nios II (Bare Metal)**: Follow the [Nios II Compilation Guide](docs/nios2_compilation_steps.md).
+    *   Requires **Intel FPGA Monitor Program** (Quartus 18.1).
+    *   Run `software/build_nios2.ps1` to compile.
 - **Software**:
   - Intel Quartus Prime Lite 18.1.
   - SoC EDS (Embedded Design Suite).

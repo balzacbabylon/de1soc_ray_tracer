@@ -9,6 +9,28 @@ Ensure you have the Intel FPGA (Quartus) software installed. Based on your syste
 *   **Nios II EDS Directory**: `c:\intelFPGA_lite\18.1\nios2eds`
 *   **University Program Directory**: `c:\intelFPGA_lite\18.1\University_Program`
 
+
+### Installation Instructions
+To successfully compile Nios II software, you must have the **Intel FPGA Monitor Program** installed. This toolchain provides the specific libraries and linker scripts used in this project.
+
+1.  **Download Quartus Prime Lite 18.1**:
+    *   Visit the [Intel FPGA Software Download Center](https://fpgasoftware.intel.com/18.1/?edition=lite).
+    *   Select "18.1" and your OS (Windows).
+    *   Download **Quartus Prime Lite Edition**. This includes the Nios II EDS.
+
+2.  **Download University Program Installer**:
+    *   Visit the [Intel University Program](https://www.intel.com/content/www/us/en/software/programmable/quartus-prime/download.html) (or search for "Intel FPGA Monitor Program download").
+    *   Install the **Intel FPGA Monitor Program**.
+
+### Critical: Compiler Version
+This project is configured for **Nios II GCC 5.3.0 (Altera 18.1)**. Newer versions (Quartus 19.1+) may break compatibility with the provided linker scripts (`nios_cpp_build.ld`).
+
+**Verify your compiler path:**
+```powershell
+& "c:\intelFPGA_lite\18.1\nios2eds\bin\gnu\H-x86_64-mingw32\bin\nios2-elf-gcc.exe" --version
+# Expected: nios2-elf-gcc.exe (Altera 18.1 Build 625) 5.3.0
+```
+
 ## Step 1: Set up the Environment
 
 You need to add the Nios II compiler binaries to your system PATH or use the full path to the executable.

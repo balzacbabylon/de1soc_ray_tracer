@@ -3,6 +3,10 @@ $OC = "c:\intelFPGA_lite\18.1\nios2eds\bin\gnu\H-x86_64-mingw32\bin\nios2-elf-ob
 $LINKER_SCRIPT = "c:\intelFPGA_lite\18.1\University_Program\Monitor_Program\build\nios_cpp_build.ld"
 $HAL_INC = "c:\intelFPGA_lite\18.1\nios2eds\components\altera_nios2\HAL\inc"
 
+# Set working directory to project root/software (one level up from tools)
+$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location "$SCRIPT_DIR/.." 
+
 # Flags exactly matching Monitor Program (Array for PowerShell Splatting)
 $CC_FLAGS = @(
     "-Wall", "-c", "-g", "-O1", 
@@ -14,6 +18,9 @@ $CC_FLAGS = @(
 $INC_FLAGS = @("-I", "include", "-I", "generated", "-I", $HAL_INC)
 
 Write-Host "Starting Nios II Build (Exact Monitor Program Replication)..."
+
+# Ensure bin directory exists
+if (-not (Test-Path "bin")) { New-Item -ItemType Directory -Force -Path "bin" | Out-Null }
 
 # 1. Compile main.c
 Write-Host "Compiling main.c..."
@@ -42,11 +49,11 @@ Write-Host "Linking..."
     "-Wl,--defsym" "-Wl,nasys_data_mem=0x0" `
     "-Wl,--script=$LINKER_SCRIPT" `
     "src/main.o" "src/platform.o" "src/renderer.o" "src/niosII_jtag_uart.o" `
-    -o "main.elf"
+    -o "bin/main.elf"
 if ($LASTEXITCODE -ne 0) { Write-Error "Linking failed"; exit 1 }
 
 # 6. Objcopy (SREC)
 Write-Host "Generating SREC..."
-& $OC -O srec "main.elf" "main.srec"
+& $OC -O srec "bin/main.elf" "bin/main.srec"
 
-Write-Host "Build Complete!" -ForegroundColor Green
+Write-Host "Build Complete! Output in bin/" -ForegroundColor Green
