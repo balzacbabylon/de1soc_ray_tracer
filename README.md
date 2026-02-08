@@ -44,8 +44,7 @@ Multimodal neuroimaging (EEG, MEG, fNIRS) helps creating a fuller picture of bra
 ### Compilation & Build
 - **FPGA (Quartus)**: Open `de1soc_ray_tracer.qpf` in Quartus Prime 18.1.
 - **HPS (Software)**:
-  - **Linux**: Use the provided `Makefile` in `software/`.
-  - **Nios II (Bare Metal)**: Follow the [Nios II Compilation Guide](docs/nios2_compilation_steps.md).
+  - **Nios II (Bare Metal)**: 
     *   Requires **Intel FPGA Monitor Program** (Quartus 18.1).
     *   Run `software/tools/build_nios2.ps1` to compile.
     *   **Test without Hardware**: Use [CPulator](https://cpulator.01xz.net/?sys=nios-de1soc) to simulate your `.elf` file.
@@ -62,16 +61,13 @@ Multimodal neuroimaging (EEG, MEG, fNIRS) helps creating a fuller picture of bra
 3. Compile the design to generate the `.sof` file.
 4. Program the FPGA via JTAG.
 
-#### 2. Software (HPS)
-1. Navigate to the software directory:
-   ```bash
-   cd software
+#### 2. Software (Nios II)
+1. Run the build script from the project root:
+   ```powershell
+   ./software/tools/build_nios2.ps1
    ```
-2. Build the application:
-   ```bash
-   make
-   ```
-3. Run the executable on the DE1-SoC Linux environment.
+2. The compiled binary will be at `software/bin/main.elf`.
+3. Load onto the DE1-SoC or simulate in CPulator.
 
 ## Documentation
 - [Architecture Overview](docs/architecture.md)

@@ -10,12 +10,12 @@ Optimize for: correctness > maintainability > speed.
 - Prefer small diffs; avoid broad refactors unless requested.
 - If uncertain, write a plan in `docs/research_requests.md` or `implementation_plan.md` and ask for confirmation.
 - **Documentation**: All major architectural changes must be reflected in `docs/architecture.md`.
+- **Routine Updates**: After completing any significant task, you must review and update the project documentation (README, docs/) to ensure it matches the current project status.
 
 ## How to run the project (commands you must use)
-- **Software (HPS) Build**:
-  ```bash
-  cd software
-  make
+- **Software (Nios II) Build**:
+  ```powershell
+  ./software/tools/build_nios2.ps1
   ```
 - **Hardware (FPGA)**:
   - Quartus project located in `hardware/quartus/`. Open `.qpf` with Quartus Prime 18.1.
